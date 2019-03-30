@@ -1,95 +1,44 @@
-def Polyb(openText, whatDo):
+def Polyb(openText, key, whatDo):
 
-    index_Eng = [[65,90],[97,122]],[32],[46],[44]]
-    Eng = [[chr(j) for j in range(65,90)] for i in range()]
-    matrix =    {0 : [['a', 'b', 'c', 'd', 'e'],
-                ['f', 'g', 'h', 'i', 'k'],
-                ['l', 'm', 'n', 'o', 'p'],
-                ['q', 'r', 's', 't', 'u'],
-                ['v', 'w', 'x', 'y', 'z'],
-                ['j', ' ', ',', '.', '']],
+    Eng = [[65, 91], [97, 123], [48, 58]]
+    Rus = [[1040, 1072], [1072, 1104], [48, 58]]
 
-                1 : [['A', 'B', 'C', 'D', 'E'],
-                ['F', 'G', 'H', 'I', 'K'],
-                ['L', 'M', 'N', 'O', 'P'],
-                ['Q', 'R', 'S', 'T', 'U'],
-                ['V', 'W', 'X', 'Y', 'Z'],
-                ['J', ' ', ',', '.', '']],}
+    index = [8,  ]
 
+    matrix = {0: [chr(j) for i in Eng for j in range(i[0], i[1])] + [chr(32)] + [chr(46)],
 
+              1: [chr(j) for i in Rus for j in range(i[0], i[1])] + [chr(1105)] + [chr(1025)] + [chr(32)] + [chr(46)] + [chr(44)] + [chr(33)] + [chr(39)]}
 
-    res = [[], [], []]
+    Alpha = []
+    for i in range(index[key][1]):
+        Alpha.append([])
+        for j in range(index[key][0]):
+            Alpha[i].append(matrix[key][i*index[key][0] + j])
+    res = [[], []]
     string_res = ''
     amount = len(openText)
 
     if whatDo == "Шифруем":
 
         for c in openText:
-
             flag = 0
-
-            if c == " " or c == "." or c == ",":
-                res[1].append(matrix[res[2][len(res[1])-1]])
-
-
-
-            for i in range(len(matrix[0])):
-                if c in matrix[0][i]:
+            for i in range(len(Alpha)):
+                if c in Alpha[i]:
                     res[1].append(i)
-                    res[0].append(matrix[0][i].index(c))
-                    res[2].append(0)
+                    res[0].append(Alpha[i].index(c))
                     flag = 1
-                    break
-            if flag == 1:
-                continue
+            if not flag:
+                return 0
 
-            for i in range(len(matrix[1])):
-                if c in matrix[1][i]:
-                    res[1].append(i)
-                    res[0].append(matrix[1][i].index(c))
-                    res[2].append(1)
-                    flag = 1
-                    break
-            if flag == 1:
-                continue
 
-            for i in range(len(matrix[2])):
-                if c in matrix[2][i]:
-                    res[1].append(i)
-                    res[0].append(matrix[2][i].index(c))
-                    res[2].append(2)
-                    flag = 1
-                    break
-            if flag == 1:
-                continue
-
-            for i in range(len(matrix[3])):
-                if c in matrix[3][i]:
-                    res[1].append(i)
-                    res[0].append(matrix[3][i].index(c))
-                    res[2].append(3)
-                    flag = 1
-                    break
-            if flag == 1:
-                continue
 
         res[0] = res[0] + res[1]
-        res[2] = res[2]*2
         i = 0
 
         while i < amount * 2 - 2:
-            if res[2][i] == res[2][i + 1]:
-                    if res[2][i] == 0:
-                        string_res += matrix_en[res[0][i+1]][res[0][i]]
-                    if res[2][i] == 1:
-                        string_res += matrix_EN[res[0][i+1]][res[0][i]]
-                    if res[2][i] == 2:
-                        string_res += matrix_rus[res[0][i+1]][res[0][i]]
-                    if res[2][i] == 3:
-                        string_res += matrix_RUS[res[0][i+1]][res[0][i]]
-                    i += 2
+                string_res += Alpha[res[0][i]][res[0][i + 1]]
+                i += 2
         return string_res
 
     if whatDo == "Расшифруем":
-
         return res
