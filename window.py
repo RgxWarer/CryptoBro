@@ -131,3 +131,5 @@ class Ui_Dialog(object):
         self.textEdit1.setReadOnly(True)
         self.textEdit2.setReadOnly(True)
         self.Bt_do.setDisabled(True)
+        self.textEdit1.setReadOnly(False)
+        self.textEdit4.setReadOnly(True)

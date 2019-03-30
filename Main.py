@@ -15,8 +15,11 @@ from window import *
 import re
 
 
+
+
 class MyWin(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
+        self.buf = None
         QtWidgets.QWidget.__init__(self, parent)
         self.setWindowIcon(QIcon('logo.png'))
         self.ui = Ui_Dialog()
@@ -37,6 +40,7 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.hintField.setText("")
         self.ui.cryptosystem.setCurrentIndex(-1)
         self.ui.Bt_do.setEnabled(False)
+        self.ui.textEdit4.setText('')
 
     def ReadFunc(self):
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', "*.txt")
@@ -124,7 +128,6 @@ class MyWin(QtWidgets.QMainWindow):
                 text = self.ui.textEdit1.toPlainText()
                 result = Gronsfeld(text, key, whatDO)
                 self.ui.textEdit2.setText(result)
-
             else:
                 self.ui.msgErr.setText("Недопустимый ключ!")
                 self.ui.msgErr.exec()
@@ -134,9 +137,10 @@ class MyWin(QtWidgets.QMainWindow):
             if self.Validator("[^\d]+", key):
                 text = self.ui.textEdit1.toPlainText()
                 alpha = self.ui.textEdit4.toPlainText()
-                result, rand_alpha = Alberti(text, int(key), alpha, whatDO)
+                result, rand_alpha_text, tmp_data = Alberti(text, int(key), alpha, self.buf, whatDO)
+                self.buf = tmp_data
                 self.ui.textEdit2.setText(result)
-                self.ui.textEdit4.setText(str(rand_alpha))
+                self.ui.textEdit4.setText(str(rand_alpha_text))
 
             else:
                 self.ui.msgErr.setText("Недопустимый ключ!")
@@ -144,7 +148,7 @@ class MyWin(QtWidgets.QMainWindow):
 
     def hintFunc(self):
         system = self.ui.cryptosystem.currentText()
-        self.ui.textEdit1.setReadOnly(False)
+        self.ui.textEdit4.setText('')
         if system == "Атбаш":
             self.ui.textKey.setText("Ключ не требуется")
             self.ui.textKey.setDisabled(True)
@@ -177,7 +181,7 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Альберти":
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
-            self.ui.hintField.setText("Ключ - это число = повороту!")
+            self.ui.hintField.setText("Ключ - это число = величине поворота!")
 
         self.ui.Bt_do.setEnabled(True)
 
