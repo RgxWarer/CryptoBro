@@ -109,7 +109,7 @@ class Ui_Dialog(object):
         self.Bt_Write.setText(_translate("Dialog", "Запись в файл"))
         self.Bt_Read.setText(_translate("Dialog", "Чтение из файла"))
 
-        list_Cipher = ["Атбаш", "Скитала", "Цезарь", "Квадрат полибия", "Виженер", "Гронсфельд", "Альберти"]
+        list_Cipher = ["Атбаш", "Скитала", "Цезарь", "Квадрат полибия", "Виженер", "Гронсфельд", "Альберти", "Ришелье", "Плейфер"]
         for i in list_Cipher:
             self.cryptosystem.addItem(i)
 

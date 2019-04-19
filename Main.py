@@ -7,6 +7,8 @@ from Polybius import Polyb
 from Vigenеre import Vigener
 from Gronsfeld import Gronsfeld
 from Alberti import Alberti
+from  Richelieu import Richelie
+from  Pleifer_m import Pleifer
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -76,7 +78,7 @@ class MyWin(QtWidgets.QMainWindow):
 
         elif system == "Скитала":
             key = self.ui.textKey.toPlainText()
-            if self.Validator("[^\d]+", key):
+            if key and self.Validator("[^\d]+", key):
                 text = self.ui.textEdit1.toPlainText()
                 result = ScytFunk(text, int(key), whatDO)
                 self.ui.textEdit2.setText(result)
@@ -86,7 +88,7 @@ class MyWin(QtWidgets.QMainWindow):
 
         elif system == "Цезарь":
             key = self.ui.textKey.toPlainText()
-            if self.Validator("[^\d]+", key):
+            if key and self.Validator("[^\d]+", key):
                 text = self.ui.textEdit1.toPlainText()
                 result = CezarFunk(text, int(key), whatDO)
                 self.ui.textEdit2.setText(result)
@@ -97,10 +99,11 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Квадрат полибия":
             key = self.ui.textKey.toPlainText()
             text = self.ui.textEdit1.toPlainText()
-            if self.Validator("[^\d]+", key) and self.Validator("[^a-zA-Zа-яА-ЯёЁ .,]+", text):
-                result = Polyb(text, int(key), whatDO)
+            if key and self.Validator("[^a-zA-Zа-яА-ЯёЁ .,]+", key) and self.Validator("[^a-zA-Zа-яА-ЯёЁ .,]+", text):
+                result, alpha = Polyb(text, key, whatDO)
                 if result:
                     self.ui.textEdit2.setText(result)
+                    self.ui.textEdit4.setText(str(alpha))
                 else:
                     self.ui.msgErr.setText("Некорректный ввод")
                     self.ui.msgErr.exec()
@@ -110,7 +113,7 @@ class MyWin(QtWidgets.QMainWindow):
 
         elif system == "Виженер":
             key = self.ui.textKey.toPlainText()
-            if self.Validator("[^a-zA-Zа-яА-ЯёЁ]+", key):
+            if key and self.Validator("[^a-zA-Zа-яА-ЯёЁ]+", key):
                 text = self.ui.textEdit1.toPlainText()
                 result = Vigener(text, key, whatDO)
                 if result:
@@ -124,7 +127,7 @@ class MyWin(QtWidgets.QMainWindow):
 
         elif system == "Гронсфельд":
             key = self.ui.textKey.toPlainText()
-            if self.Validator("[^\d]+", key):
+            if key and self.Validator("[^\d]+", key):
                 text = self.ui.textEdit1.toPlainText()
                 result = Gronsfeld(text, key, whatDO)
                 self.ui.textEdit2.setText(result)
@@ -134,16 +137,43 @@ class MyWin(QtWidgets.QMainWindow):
 
         elif system == "Альберти":
             key = self.ui.textKey.toPlainText()
-            if self.Validator("[^\d]+", key):
+            if key and self.Validator("[^\d]+", key):
                 text = self.ui.textEdit1.toPlainText()
-                alpha = self.ui.textEdit4.toPlainText()
-                result, rand_alpha_text, tmp_data = Alberti(text, int(key), alpha, self.buf, whatDO)
-                self.buf = tmp_data
+                result, text = Alberti(text, int(key), whatDO)
                 self.ui.textEdit2.setText(result)
-                self.ui.textEdit4.setText(str(rand_alpha_text))
+                self.ui.textEdit4.setText(str(text))
 
             else:
                 self.ui.msgErr.setText("Недопустимый ключ!")
+                self.ui.msgErr.exec()
+
+        elif system == "Ришелье":
+            key = self.ui.textKey.toPlainText()
+            if key and self.Validator("[^\d(),]+", key):
+                text = self.ui.textEdit1.toPlainText()
+                result = Richelie(text, key, whatDO)
+                if result:
+                    self.ui.textEdit2.setText(result)
+                else:
+                    self.ui.msgErr.setText("Ошибка при записи ключа!")
+                    self.ui.msgErr.exec()
+
+            else:
+                self.ui.msgErr.setText("Недопустимый ключ!")
+                self.ui.msgErr.exec()
+
+        elif system == "Плейфер":
+            key = self.ui.textKey.toPlainText()
+            text = self.ui.textEdit1.toPlainText()
+            if key and self.Validator("[^a-zA-Zа-яА-ЯёЁ]+", key):
+                result = Pleifer(text, key, whatDO)
+                if result:
+                    self.ui.textEdit2.setText(result)
+                else:
+                    self.ui.msgErr.setText("Некорректный ввод")
+                    self.ui.msgErr.exec()
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
 
     def hintFunc(self):
@@ -181,7 +211,12 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Альберти":
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
-            self.ui.hintField.setText("Ключ - это число = величине поворота!")
+            self.ui.hintField.setText("Ключ - число = начальное смещение!")
+
+        elif system == "Ришелье":
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - строка = перестановки")
 
         self.ui.Bt_do.setEnabled(True)
 

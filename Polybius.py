@@ -1,9 +1,11 @@
 def Polyb(openText, key, whatDo):
     alpha = [[65, 91], [97, 123], [1040, 1072], [1072, 1104]]
 
-    matrix = [chr(j) for i in alpha for j in range(i[0], i[1])] + [chr(1025)] + [chr(1105)] + [chr(32)] + [chr(46)] + [chr(44)]
-    key = key % len(matrix)
-    Alpha = matrix[-key:] + matrix[:-key]
+    Alpha = [chr(j) for i in alpha for j in range(i[0], i[1])] + [chr(1025)] + [chr(1105)] + [chr(32)] + [chr(46)] + [chr(44)]
+
+    for i in key:
+        Alpha.remove(i)
+        Alpha = [i] + Alpha
 
     res = [[], []]
     string_res = ''
@@ -20,7 +22,7 @@ def Polyb(openText, key, whatDo):
         while i < len(openText) * 2:
             string_res += Alpha[(res[0][i]*11+res[0][i + 1])]
             i += 2
-        return string_res
+        return string_res, Alpha
 
     if whatDo == "Расшифруем":
 
@@ -34,6 +36,5 @@ def Polyb(openText, key, whatDo):
         while i < len(openText) * 2:
             string_res += Alpha[(res[0][i]*11+res[0][i + 1])]
             i += 2
-        return string_res
+        return string_res, Alpha
 
-        return res

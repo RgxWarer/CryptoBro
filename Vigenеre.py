@@ -30,7 +30,6 @@ def Vigener(openText, key, whatDo):
         if iter >= amount_key:
             iter = 0
 
-
     k = 0
     for i in range(len(openText)):
         if not no_alph or no_alph[0][0] != i:
