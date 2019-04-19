@@ -28,13 +28,13 @@ def Polyb(openText, key, whatDo):
 
         for c in openText:
             res[0].append(Alpha.index(c) // 11)
-            res[1].append(Alpha.index(c) % 11)
+            res[0].append(Alpha.index(c) % 11)
 
-        res[0] = res[0] + res[1]
+        res[1] = [res[0][i] for i in range(len(openText), len(res[0]))]
         i = 0
 
-        while i < len(openText) * 2:
-            string_res += Alpha[(res[0][i]*11+res[0][i + 1])]
-            i += 2
+        while i < len(openText):
+            string_res += Alpha[(res[0][i]*11+res[1][i])]
+            i += 1
         return string_res, Alpha
 

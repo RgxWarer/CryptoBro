@@ -166,10 +166,10 @@ class MyWin(QtWidgets.QMainWindow):
             key = self.ui.textKey.toPlainText()
             text = self.ui.textEdit1.toPlainText()
             if key and self.Validator("[^a-zA-Zа-яА-ЯёЁ]+", key):
-                result = Pleifer(text, key, whatDO)
-                if result:
+                try:
+                    result = Pleifer(text, key, whatDO)
                     self.ui.textEdit2.setText(result)
-                else:
+                except:
                     self.ui.msgErr.setText("Некорректный ввод")
                     self.ui.msgErr.exec()
             else:
@@ -196,7 +196,7 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Квадрат полибия":
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
-            self.ui.hintField.setText("Ключ - строка = Смещение алфавита")
+            self.ui.hintField.setText("Ключ - строка = начало алфавита")
 
         elif system == "Виженер":
             self.ui.textKey.setEnabled(True)
@@ -221,7 +221,7 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Плейфер":
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
-            self.ui.hintField.setText("Ключ - строка = Смещение алфавита")
+            self.ui.hintField.setText("Ключ - строка = начало алфавита")
 
         self.ui.Bt_do.setEnabled(True)
 
