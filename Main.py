@@ -7,8 +7,9 @@ from Polybius import Polyb
 from Vigenеre import Vigener
 from Gronsfeld import Gronsfeld
 from Alberti import Alberti
-from  Richelieu import Richelie
-from  Pleifer_m import Pleifer
+from Richelieu import Richelie
+from Pleifer_m import Pleifer
+from Vernam import Vernam
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -176,6 +177,20 @@ class MyWin(QtWidgets.QMainWindow):
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
 
+        elif system == "Вернам":
+            key = self.ui.textKey.toPlainText()
+            text = self.ui.textEdit1.toPlainText()
+            if key:
+                try:
+                    result = Vernam(text, key, whatDO)
+                    self.ui.textEdit2.setText(result)
+                except:
+                    self.ui.msgErr.setText("Некорректный ввод")
+                    self.ui.msgErr.exec()
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
+                self.ui.msgErr.exec()
+
     def hintFunc(self):
         system = self.ui.cryptosystem.currentText()
         self.ui.textEdit4.setText('')
@@ -222,6 +237,11 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - строка = начало алфавита")
+
+        elif system == "Вернам":
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - строка символов")
 
         self.ui.Bt_do.setEnabled(True)
 
