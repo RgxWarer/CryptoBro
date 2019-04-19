@@ -96,16 +96,16 @@ class MyWin(QtWidgets.QMainWindow):
 
         elif system == "Квадрат полибия":
             key = self.ui.textKey.toPlainText()
-            if self.Validator("[^1-2]+", key):
-                text = self.ui.textEdit1.toPlainText()
-                result = Polyb(text, int(key) - 1, whatDO)
+            text = self.ui.textEdit1.toPlainText()
+            if self.Validator("[^\d]+", key) and self.Validator("[^a-zA-Zа-яА-ЯёЁ .,]+", text):
+                result = Polyb(text, int(key), whatDO)
                 if result:
                     self.ui.textEdit2.setText(result)
                 else:
                     self.ui.msgErr.setText("Некорректный ввод")
                     self.ui.msgErr.exec()
             else:
-                self.ui.msgErr.setText("Недопустимый ключ!")
+                self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
 
         elif system == "Виженер":
@@ -166,7 +166,7 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Квадрат полибия":
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
-            self.ui.hintField.setText("1 - английский, 2 - русский")
+            self.ui.hintField.setText("Смещение алфавита")
 
         elif system == "Виженер":
             self.ui.textKey.setEnabled(True)

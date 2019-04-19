@@ -30,15 +30,15 @@ def Vigener(openText, key, whatDo):
         if iter >= amount_key:
             iter = 0
 
-    j = 0
+
     k = 0
     for i in range(len(openText)):
-        if not no_alph or no_alph[j][0] != i:
+        if not no_alph or no_alph[0][0] != i:
             text += alpha[alpha_i][res[k]]
             k += 1
         else:
-            text += no_alph[j][1]
-            j += 1
+            text += no_alph[0][1]
+            del no_alph[0]
     return text
 
 def encode(Text, alpha):

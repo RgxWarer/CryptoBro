@@ -102,7 +102,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
 
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "CryptoPro"))
+        Dialog.setWindowTitle(_translate("Dialog", "CryptoBro"))
 
         self.Bt_do.setText(_translate("Dialog", "Старт"))
         self.bt_clear.setText(_translate("Dialog", "Очистить"))
