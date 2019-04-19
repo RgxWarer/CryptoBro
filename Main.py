@@ -196,7 +196,7 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Квадрат полибия":
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
-            self.ui.hintField.setText("Смещение алфавита")
+            self.ui.hintField.setText("Ключ - строка = Смещение алфавита")
 
         elif system == "Виженер":
             self.ui.textKey.setEnabled(True)
@@ -217,6 +217,11 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - строка = перестановки")
+
+        elif system == "Плейфер":
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - строка = Смещение алфавита")
 
         self.ui.Bt_do.setEnabled(True)
 
