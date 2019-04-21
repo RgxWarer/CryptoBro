@@ -180,10 +180,12 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Вернам":
             key = self.ui.textKey.toPlainText()
             text = self.ui.textEdit1.toPlainText()
-            if key:
+            if key and self.Validator("[^a-zA-Zа-яА-ЯёЁ .,!()-/#%]+", key) and self.Validator("[^a-zA-Zа-яА-ЯёЁ .,!("
+                                                                                              ")-/#%]+", text):
                 try:
-                    result = Vernam(text, key, whatDO)
+                    result, text2 = Vernam(text, key, whatDO)
                     self.ui.textEdit2.setText(result)
+                    self.ui.textEdit4.setText(text2)
                 except:
                     self.ui.msgErr.setText("Некорректный ввод")
                     self.ui.msgErr.exec()

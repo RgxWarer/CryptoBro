@@ -22,6 +22,8 @@ def Richelie(openText, key, whatDo):
             elif key[i] == ')' and key[i+1] == '(':
                 f = 0
             i += 1
+    else:
+        return False
 
     key = key[1:-1].split(")(")
     a_key = []
@@ -29,7 +31,10 @@ def Richelie(openText, key, whatDo):
     for c in key:
         a_key.append([])
         for k in c.split(","):
-            a_key[i].append(int(k))
+            if k != '':
+                a_key[i].append(int(k))
+            else:
+                return False
         i += 1
     for c in a_key:
         amount += len(c)
@@ -37,7 +42,7 @@ def Richelie(openText, key, whatDo):
             if k > len(c) or k <= 0 or c.count(k) != 1:
                 return False
 
-    if amount != len(openText):
+    if amount > len(openText):
         return False
 
     if whatDo == "Шифруем":
@@ -46,7 +51,7 @@ def Richelie(openText, key, whatDo):
             for k in c:
                 res += openText[k+jump-1]
             jump += len(c)
-        return res
+        return res + openText[amount:]
 
     if whatDo == "Расшифруем":
 
@@ -54,5 +59,5 @@ def Richelie(openText, key, whatDo):
             for k in set(c):
                 res += openText[c.index(k) + jump]
             jump += len(c)
-        return res
+        return res + openText[amount:]
 
