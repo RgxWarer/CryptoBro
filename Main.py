@@ -10,6 +10,7 @@ from Alberti import Alberti
 from Richelieu import Richelie
 from Pleifer_m import Pleifer
 from Vernam import Vernam
+from Cardan import Cardan
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -193,6 +194,21 @@ class MyWin(QtWidgets.QMainWindow):
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
 
+        elif system == "Кардано":
+            key = self.ui.textKey.toPlainText()
+            text = self.ui.textEdit1.toPlainText()
+            if key and self.Validator("[^\d\[\], ]+", key):
+                try:
+                    result, text2 = Cardan(text, key, whatDO)
+                    self.ui.textEdit2.setText(result)
+                    self.ui.textEdit4.setText(text2)
+                except:
+                    self.ui.msgErr.setText("Некорректный ввод")
+                    self.ui.msgErr.exec()
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
+                self.ui.msgErr.exec()
+
     def hintFunc(self):
         system = self.ui.cryptosystem.currentText()
         self.ui.textEdit4.setText('')
@@ -244,6 +260,11 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - строка символов")
+
+        elif system == "Кардано":
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - [символ, четверть]")
 
         self.ui.Bt_do.setEnabled(True)
 

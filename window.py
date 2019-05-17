@@ -110,7 +110,7 @@ class Ui_Dialog(object):
         self.Bt_Read.setText(_translate("Dialog", "Чтение из файла"))
 
         list_Cipher = ["Атбаш", "Скитала", "Цезарь", "Квадрат полибия", "Виженер", "Гронсфельд", "Альберти", "Ришелье",
-                       "Плейфер", "Вернам"]
+                       "Плейфер", "Вернам", "Кардано"]
 
         for i in list_Cipher:
             self.cryptosystem.addItem(i)
