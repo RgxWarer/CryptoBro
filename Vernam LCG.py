@@ -1,16 +1,15 @@
-def Vernam(openText, key, whatDo):
+def VernamLCG(openText, param, whatDo):
 
     alpha = [[65, 91], [97, 123], [1040, 1072], [1072, 1104]]
 
     Alpha = [chr(j) for i in alpha for j in range(i[0], i[1])] + [chr(1025)] + [chr(1105)] + [chr(32)] + [chr(46)] + [
         chr(44)] + [chr(33)] + [chr(37)] + [chr(35)] + [chr(40)] + [chr(41)] + [chr(45)] + [chr(47)]
-    if len(key) != len(openText):
-        return False
+
+    key = LCG(len(openText), param)
     res10 = ''
     res2 = ''
     key2 = ''
     text2 = ''
-
     for c, k in zip(openText, key):
         tmp = ''
         c = BIN(Alpha.index(c))
@@ -48,5 +47,10 @@ def INT(s1):
     for digit in s1:
         decimal = decimal * 2 + int(digit)
     return decimal
+
+def LCG(n, param):
+
+    return 1
+
 
 
