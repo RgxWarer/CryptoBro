@@ -91,7 +91,7 @@ def Hill(openText, key, whatDo):
             for k in c:
                 res_txt += Alpha[k]
 
-        return res_txt
+        return res_txt, str(matrix_key) + "\n" + str(matrix_text)
 
 
     if whatDo == "Расшифруем":
@@ -115,12 +115,7 @@ def Hill(openText, key, whatDo):
         for c in res:
             for k in c:
                 res_txt += Alpha[k]
-
-        return res_txt
-
-
-txt = Hill('Мама мыла ramy и пошла в магазин в 11sdfsdf', 'masdfefqefcwec', 'Шифруем')
-print(Hill(txt, 'masdfefqefcwec', 'Расшифруем'))
+        return res_txt, str(matrix_key) + "\n" + str(invert_matrix) + "\n" + str(matrix_text)
 
 
 

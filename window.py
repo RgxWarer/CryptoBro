@@ -31,7 +31,7 @@ class Ui_Dialog(object):
         self.lable1.setObjectName("lable1")
         self.lable1.setText("Поле для ввода обрабатываемого сообщения")
 
-        self.textEdit1 = QtWidgets.QPlainTextEdit(Dialog)
+        self.textEdit1 = QtWidgets.QTextEdit(Dialog)
         self.textEdit1.setGeometry(QtCore.QRect(320, 30, 250, 120))
         self.textEdit1.setObjectName("textEdit1")
 
@@ -40,7 +40,7 @@ class Ui_Dialog(object):
         self.lable2.setObjectName("lable2")
         self.lable2.setText("Результат работы программы")
 
-        self.textEdit2 = QtWidgets.QPlainTextEdit(Dialog)
+        self.textEdit2 = QtWidgets.QTextEdit(Dialog)
         self.textEdit2.setGeometry(QtCore.QRect(320, 250, 250, 120))
         self.textEdit2.setObjectName("textEdit2")
 
@@ -110,7 +110,7 @@ class Ui_Dialog(object):
         self.Bt_Read.setText(_translate("Dialog", "Чтение из файла"))
 
         list_Cipher = ["Атбаш", "Скитала", "Цезарь", "Квадрат полибия", "Виженер", "Гронсфельд", "Альберти", "Ришелье",
-                       "Плейфер", "Вернам", "Кардано", "Гаммирование"]
+                       "Плейфер", "Вернам", "Кардано", "Хилл", "Гаммирование"]
 
         for i in list_Cipher:
             self.cryptosystem.addItem(i)

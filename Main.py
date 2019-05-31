@@ -11,6 +11,7 @@ from Richelieu import Richelie
 from Pleifer_m import Pleifer
 from Vernam import Vernam
 from Cardan import Cardan
+from Hill import Hill
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -52,8 +53,7 @@ class MyWin(QtWidgets.QMainWindow):
             name, _ = QFileDialog.getOpenFileName(self, 'Open File')
             in_file = open(name, "rb")
             text = in_file.read()
-            arr = bytearray(text)
-            arr[0] = 100
+            self.buf = bytearray(text)
             text = text.decode("mbcs")
             self.ui.textEdit1.setPlainText(text)
             in_file.close()
@@ -69,8 +69,7 @@ class MyWin(QtWidgets.QMainWindow):
         if self.ui.cryptosystem.currentText() == "Гаммирование":
             name, _ = QFileDialog.getSaveFileName(self, 'Open File')
             out_file = open(name, "wb")
-            text = bytes(self.ui.textEdit1.toPlainText(), "mbcs")
-            out_file.write(text)
+            out_file.write(bytes(self.buf))
             out_file.close()
         else:
             name, _ = QFileDialog.getSaveFileName(self, 'Write File', "*.txt")
@@ -227,6 +226,25 @@ class MyWin(QtWidgets.QMainWindow):
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
 
+        elif system == "Хилл":
+            key = self.ui.textKey.toPlainText()
+            text = self.ui.textEdit1.toPlainText()
+            if key and self.Validator("[^\da-zA-Zа-яА-ЯёЁ .,]+", key) and self.Validator("[^\da-zA-Zа-яА-ЯёЁ .,]+", text):
+                try:
+                    result, matrix = Hill(text, key, whatDO)
+                    if result:
+                        self.ui.textEdit2.setText(result)
+                        self.ui.textEdit4.setText(matrix)
+                    else:
+                        self.ui.msgErr.setText("Некорректный ввод")
+                        self.ui.msgErr.exec()
+                except:
+                    self.ui.msgErr.setText("Ошибка! Некорректный ввод!")
+                    self.ui.msgErr.exec()
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
+                self.ui.msgErr.exec()
+
     def hintFunc(self):
         system = self.ui.cryptosystem.currentText()
         self.ui.textEdit4.setText('')
@@ -283,6 +301,11 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - [символ, четверть]")
+
+        elif system == "Хилл":
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - символы алфавита")
 
         self.ui.Bt_do.setEnabled(True)
 
