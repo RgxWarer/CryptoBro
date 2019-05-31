@@ -1,10 +1,5 @@
 def VernamLCG(openText, param, whatDo):
 
-    alpha = [[65, 91], [97, 123], [1040, 1072], [1072, 1104]]
-
-    Alpha = [chr(j) for i in alpha for j in range(i[0], i[1])] + [chr(1025)] + [chr(1105)] + [chr(32)] + [chr(46)] + [
-        chr(44)] + [chr(33)] + [chr(37)] + [chr(35)] + [chr(40)] + [chr(41)] + [chr(45)] + [chr(47)]
-
     key = LCG(len(openText), param)
     res10 = ''
     res2 = ''
@@ -49,8 +44,24 @@ def INT(s1):
     return decimal
 
 def LCG(n, param):
+    tmp = param.split(" ")
 
-    return 1
+    a = int(tmp[0])
+    b = int(tmp[1])
+    gamma = int(tmp[2])
+
+    if b % 2 == 0:
+        return None
+
+    if a % 4 != 1:
+        return None
+    key = ''
+
+    while len(key) < n:
+        gamma = (a * gamma + b) % 2017
+        key += bin(gamma)
+    return key
+
 
 
 

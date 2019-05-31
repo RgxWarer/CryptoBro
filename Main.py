@@ -47,20 +47,38 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.textEdit4.setText('')
 
     def ReadFunc(self):
-        name, _ = QFileDialog.getOpenFileName(self, 'Open File', "*.txt")
-        if name != "":
-            file = codecs.open(name, 'r', 'utf-8')
-            text = file.read()
-            self.ui.textEdit1.setText(text)
-            file.close()
+
+        if self.ui.cryptosystem.currentText() == "Гаммирование":
+            name, _ = QFileDialog.getOpenFileName(self, 'Open File')
+            in_file = open(name, "rb")
+            text = in_file.read()
+            arr = bytearray(text)
+            arr[0] = 100
+            text = text.decode("mbcs")
+            self.ui.textEdit1.setPlainText(text)
+            in_file.close()
+        else:
+            name, _ = QFileDialog.getOpenFileName(self, 'Open File', "*.txt")
+            if name != "":
+                file = codecs.open(name, 'r', 'utf-8')
+                text = file.read()
+                self.ui.textEdit1.setText(text)
+                file.close()
 
     def WriteFunc(self):
-        name, _ = QFileDialog.getSaveFileName(self, 'Write File', "*.txt")
-        if name != "":
-            file = codecs.open(name, 'w', 'utf-8')
-            text = str(self.ui.textEdit2.toPlainText())
-            file.write(text)
-            file.close()
+        if self.ui.cryptosystem.currentText() == "Гаммирование":
+            name, _ = QFileDialog.getSaveFileName(self, 'Open File')
+            out_file = open(name, "wb")
+            text = bytes(self.ui.textEdit1.toPlainText(), "mbcs")
+            out_file.write(text)
+            out_file.close()
+        else:
+            name, _ = QFileDialog.getSaveFileName(self, 'Write File', "*.txt")
+            if name != "":
+                file = codecs.open(name, 'w', 'utf-8')
+                text = str(self.ui.textEdit2.toPlainText())
+                file.write(text)
+                file.close()
 
     def Validator(self, valTxt, txtIn):
         if re.search(valTxt, txtIn):
