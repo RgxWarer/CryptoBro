@@ -1,13 +1,15 @@
 from math import sqrt, ceil
 
+
 def bezout(a, b):
     x, xx, y, yy = 1, 0, 0, 1
     while b:
         q = a // b
         a, b = b, a % b
-        x, xx = xx, x - xx*q
-        y, yy = yy, y - yy*q
+        x, xx = xx, x - xx * q
+        y, yy = yy, y - yy * q
     return x, y
+
 
 def Det2(matrix):
     return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
@@ -25,17 +27,23 @@ def Determinant(matrix):
         return matrix[0][0]
     elif size == 2:
         return Det2(matrix)
-
-
     return sum((-1) ** j * matrix[0][j] * Determinant(Minor(matrix, 0, j))
                for j in range(size))
 
 
 def Mult(a, b, amount):
-    result = [[sum(a * b  for a, b in zip(A_row, B_col)) % amount
+    result = [[sum(a * b for a, b in zip(A_row, B_col)) % amount
                for B_col in zip(*b)]
               for A_row in a]
-    return  result
+    return result
+
+
+def Out_Txt(a):
+    txt = '['
+    for row in a:
+        txt += str(row) + "\n"
+    txt += "]"
+    return txt
 
 
 def Hill(openText, key, whatDo):
@@ -70,7 +78,7 @@ def Hill(openText, key, whatDo):
         index_txt.append(Alpha.index(c))
     matrix_text = []
     index = 0
-    for i in range(m//n):
+    for i in range(m // n):
         matrix_text.append([])
         for j in range(n):
             matrix_text[i].append(index_txt[index])
@@ -91,8 +99,7 @@ def Hill(openText, key, whatDo):
             for k in c:
                 res_txt += Alpha[k]
 
-        return res_txt, str(matrix_key) + "\n" + str(matrix_text)
-
+        return res_txt, Out_Txt(matrix_key) + "\n" + Out_Txt(matrix_text)
 
     if whatDo == "Расшифруем":
 
@@ -115,7 +122,4 @@ def Hill(openText, key, whatDo):
         for c in res:
             for k in c:
                 res_txt += Alpha[k]
-        return res_txt, str(matrix_key) + "\n" + str(invert_matrix) + "\n" + str(matrix_text)
-
-
-
+        return res_txt, Out_Txt(matrix_key) + "\n" + Out_Txt(invert_matrix) + "\n" + Out_Txt(matrix_text)

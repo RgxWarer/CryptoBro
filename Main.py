@@ -12,6 +12,7 @@ from Pleifer_m import Pleifer
 from Vernam import Vernam
 from Cardan import Cardan
 from Hill import Hill
+from Vernam_LCG import VernamLCG
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -25,6 +26,7 @@ import re
 class MyWin(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         self.buf = None
+        self.fromFile = None
         QtWidgets.QWidget.__init__(self, parent)
         self.setWindowIcon(QIcon('logo.png'))
         self.ui = Ui_Dialog()
@@ -48,12 +50,12 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.textEdit4.setText('')
 
     def ReadFunc(self):
-
         if self.ui.cryptosystem.currentText() == "Гаммирование":
             name, _ = QFileDialog.getOpenFileName(self, 'Open File')
             in_file = open(name, "rb")
             text = in_file.read()
             self.buf = bytearray(text)
+            self.fromFile = 1
             text = text.decode("mbcs")
             self.ui.textEdit1.setPlainText(text)
             in_file.close()
@@ -189,7 +191,7 @@ class MyWin(QtWidgets.QMainWindow):
                     result = Pleifer(text, key, whatDO)
                     self.ui.textEdit2.setText(result)
                 except:
-                    self.ui.msgErr.setText("Некорректный ввод")
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
                     self.ui.msgErr.exec()
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
@@ -205,7 +207,7 @@ class MyWin(QtWidgets.QMainWindow):
                     self.ui.textEdit2.setText(result)
                     self.ui.textEdit4.setText(text2)
                 except:
-                    self.ui.msgErr.setText("Некорректный ввод")
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
                     self.ui.msgErr.exec()
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
@@ -220,7 +222,7 @@ class MyWin(QtWidgets.QMainWindow):
                     self.ui.textEdit2.setText(result)
                     self.ui.textEdit4.setText(text2)
                 except:
-                    self.ui.msgErr.setText("Некорректный ввод")
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
                     self.ui.msgErr.exec()
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
@@ -236,15 +238,36 @@ class MyWin(QtWidgets.QMainWindow):
                         self.ui.textEdit2.setText(result)
                         self.ui.textEdit4.setText(matrix)
                     else:
-                        self.ui.msgErr.setText("Некорректный ввод")
+                        self.ui.msgErr.setText("Некорректный ввод!")
                         self.ui.msgErr.exec()
                 except:
-                    self.ui.msgErr.setText("Ошибка! Некорректный ввод!")
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
                     self.ui.msgErr.exec()
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
 
+        elif system == "Гаммирование":
+            key = self.ui.textKey.toPlainText()
+            if key and re.match("[0-9]* [0-9]* [0-9]*", key):
+                if self.fromFile:
+                    text = self.buf
+                    key += " 1"
+                elif whatDO == "Шифруем":
+                    text = bytearray(self.ui.textEdit1.toPlainText().encode('mbcs'))
+                    key += " 0"
+                else:
+                    text = self.buf
+                    key += " 0"
+                try:
+                    result, self.buf = VernamLCG(text, key, whatDO)
+                    self.ui.textEdit2.setText(result)
+                except:
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
+                    self.ui.msgErr.exec()
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
+                self.ui.msgErr.exec()
     def hintFunc(self):
         system = self.ui.cryptosystem.currentText()
         self.ui.textEdit4.setText('')
@@ -306,6 +329,14 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setEnabled(True)
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - символы алфавита")
+
+        elif system == "Гаммирование":
+            self.buf = None
+            self.fromFile = None
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - три числа")
+
 
         self.ui.Bt_do.setEnabled(True)
 
