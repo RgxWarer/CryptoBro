@@ -13,14 +13,13 @@ from Vernam import Vernam
 from Cardan import Cardan
 from Hill import Hill
 from Vernam_LCG import VernamLCG
+from DES import DES
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from window import *
 import re
-
-
 
 
 class MyWin(QtWidgets.QMainWindow):
@@ -48,9 +47,10 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.cryptosystem.setCurrentIndex(-1)
         self.ui.Bt_do.setEnabled(False)
         self.ui.textEdit4.setText('')
+        self.ui.pbar.setValue(0)
 
     def ReadFunc(self):
-        if self.ui.cryptosystem.currentText() == "Гаммирование":
+        if self.ui.cryptosystem.currentText() in ["Гаммирование", 'DES']:
             name, _ = QFileDialog.getOpenFileName(self, 'Open File')
             in_file = open(name, "rb")
             text = in_file.read()
@@ -68,7 +68,7 @@ class MyWin(QtWidgets.QMainWindow):
                 file.close()
 
     def WriteFunc(self):
-        if self.ui.cryptosystem.currentText() == "Гаммирование":
+        if self.ui.cryptosystem.currentText() in ["Гаммирование", 'DES']:
             name, _ = QFileDialog.getSaveFileName(self, 'Open File')
             out_file = open(name, "wb")
             out_file.write(bytes(self.buf))
@@ -85,6 +85,9 @@ class MyWin(QtWidgets.QMainWindow):
         if re.search(valTxt, txtIn):
             return False
         return True
+
+    def SetStatus(self, how_val):
+        self.ui.pbar.setValue(how_val)
 
     # -------------------------------------------------------------------------
 
@@ -231,7 +234,8 @@ class MyWin(QtWidgets.QMainWindow):
         elif system == "Хилл":
             key = self.ui.textKey.toPlainText()
             text = self.ui.textEdit1.toPlainText()
-            if key and self.Validator("[^\da-zA-Zа-яА-ЯёЁ .,]+", key) and self.Validator("[^\da-zA-Zа-яА-ЯёЁ .,]+", text):
+            if key and self.Validator("[^\da-zA-Zа-яА-ЯёЁ .,]+", key) and self.Validator("[^\da-zA-Zа-яА-ЯёЁ .,]+",
+                                                                                         text):
                 try:
                     result, matrix = Hill(text, key, whatDO)
                     if result:
@@ -268,9 +272,39 @@ class MyWin(QtWidgets.QMainWindow):
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
+        elif system == "DES":
+            key = self.ui.textKey.toPlainText()
+            if key and re.match("[0-1]{56}", key) or key == '':
+                if self.fromFile:
+                    text = self.buf
+                elif whatDO == "Шифруем":
+                    text = bytearray(self.ui.textEdit1.toPlainText().encode('mbcs'))
+                else:
+                    text = self.buf
+                try:
+                    for c in DES(text, key, whatDO):
+                        try:
+                            self.ui.pbar.setValue(int(c))
+                        except:
+                            self.ui.pbar.setValue(100)
+                            result, self.buf, key, msg = c[0], c[1], c[2], c[3]
+                            self.ui.textEdit2.setText(result)
+                            self.ui.textKey.setText(key)
+                            self.ui.textEdit4.setText(msg)
+                            break
+                    #result, self.buf, key, msg = DES(text, key, whatDO)
+
+                except:
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
+                    self.ui.msgErr.exec()
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
+                self.ui.msgErr.exec()
+
     def hintFunc(self):
         system = self.ui.cryptosystem.currentText()
         self.ui.textEdit4.setText('')
+
         if system == "Атбаш":
             self.ui.textKey.setText("Ключ не требуется")
             self.ui.textKey.setDisabled(True)
@@ -337,6 +371,13 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - три числа")
 
+        elif system == "DES":
+            self.ui.pbar.setValue(0)
+            self.buf = None
+            self.fromFile = None
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - битовая последовательность")
 
         self.ui.Bt_do.setEnabled(True)
 
@@ -346,15 +387,3 @@ if __name__ == "__main__":
     myapp = MyWin()
     myapp.show()
     sys.exit(app.exec_())
-
-# reg_ex = QRegExp("[a-zA-Zа-яА-ЯёЁ\s]+")
-# text_validator = QRegExpValidator(reg_ex, self.ui.textEdit1)
-
-# self.ui.textEdit1.setValidator(text_validator)
-# valTxt = "[^a-zA-Zа-яА-ЯёЁ\s]+"
-#            if self.Validator(valTxt, text):
-#                result = atbashFunc(text, whatDO)
-#                self.ui.textEdit2.setText(result)
-#            else:
-#                self.ui.msgErr.setText("Недопустимый ввод.")
-#                self.ui.msgErr.exec()

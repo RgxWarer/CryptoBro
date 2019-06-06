@@ -18,6 +18,9 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(1130, 400)
 
+        self.pbar = QtWidgets.QProgressBar(Dialog)
+        self.pbar.setGeometry(313, 157, 300, 20)
+
         self.cryptosystem = QtWidgets.QComboBox(Dialog)
         self.cryptosystem.setGeometry(QtCore.QRect(635, 30, 150, 22))
         self.cryptosystem.setObjectName("cryptosystem")
@@ -110,7 +113,7 @@ class Ui_Dialog(object):
         self.Bt_Read.setText(_translate("Dialog", "Чтение из файла"))
 
         list_Cipher = ["Атбаш", "Скитала", "Цезарь", "Квадрат полибия", "Виженер", "Гронсфельд", "Альберти", "Ришелье",
-                       "Плейфер", "Вернам", "Кардано", "Хилл", "Гаммирование"]
+                       "Плейфер", "Вернам", "Кардано", "Хилл", "Гаммирование", "DES"]
 
         for i in list_Cipher:
             self.cryptosystem.addItem(i)
@@ -135,3 +138,4 @@ class Ui_Dialog(object):
         self.Bt_do.setDisabled(True)
         self.textEdit1.setReadOnly(False)
         self.textEdit4.setReadOnly(True)
+        self.pbar.setValue(0)
