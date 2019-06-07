@@ -15,12 +15,28 @@ from Hill import Hill
 from Vernam_LCG import VernamLCG
 from DES import DES
 from GOST import GOST
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import *
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from window import *
 import re
+
+
+class BackGround(QThread):
+
+    def __init__(self):
+        QThread.__init__(self)
+
+    def __del__(self):
+        self.wait()
+
+    def runDES(self, text, key, whatDO, pbar):
+        result = DES(text, key, whatDO, pbar)
+        return result
+
+    def runGOST(self, text, key, whatDO, pbar):
+        result = GOST(text, key, whatDO, pbar)
+        return result
 
 
 class MyWin(QtWidgets.QMainWindow):
@@ -285,11 +301,12 @@ class MyWin(QtWidgets.QMainWindow):
                     text = self.buf
                 try:
                     MyWin.setDisabled(self, True)
-                    result, self.buf, key, msg = DES(text, key, whatDO, self.ui.pbar)
+                    self.DES_th = BackGround()
+                    result = self.DES_th.runDES(text, key, whatDO, self.ui.pbar)
                     MyWin.setDisabled(self, False)
                     self.ui.textEdit2.setText(result)
                     self.ui.textKey.setText(key)
-                    self.ui.textEdit4.setText(msg)
+                    #self.ui.textEdit4.setText(msg)
 
                 except:
                     self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
@@ -413,8 +430,6 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.hintField.setText("Ключ - битовая последовательность")
 
         self.ui.Bt_do.setEnabled(True)
-
-
 
 
 if __name__ == "__main__":
