@@ -91,6 +91,7 @@ def GOST(openText, input, whatDo, Progress):
         long_old += step
         if int(long_new) > 100:
             long_new = 100
+    Progress.setValue(100)
 
     if whatDo == "Расшифруем":
         musor = res[-1]
