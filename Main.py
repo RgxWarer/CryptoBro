@@ -14,6 +14,7 @@ from Cardan import Cardan
 from Hill import Hill
 from Vernam_LCG import VernamLCG
 from DES import DES
+from GOST import GOST
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -50,13 +51,13 @@ class MyWin(QtWidgets.QMainWindow):
         self.ui.pbar.setValue(0)
 
     def ReadFunc(self):
-        if self.ui.cryptosystem.currentText() in ["Гаммирование", 'DES']:
+        if self.ui.cryptosystem.currentText() in ["Гаммирование", 'DES', 'ГОСТ']:
             name, _ = QFileDialog.getOpenFileName(self, 'Open File')
             in_file = open(name, "rb")
             text = in_file.read()
             self.buf = bytearray(text)
             self.fromFile = 1
-            text = text.decode("mbcs")
+            text = text[:1000].decode("mbcs")
             self.ui.textEdit1.setPlainText(text)
             in_file.close()
         else:
@@ -68,7 +69,7 @@ class MyWin(QtWidgets.QMainWindow):
                 file.close()
 
     def WriteFunc(self):
-        if self.ui.cryptosystem.currentText() in ["Гаммирование", 'DES']:
+        if self.ui.cryptosystem.currentText() in ["Гаммирование", 'DES', 'ГОСТ']:
             name, _ = QFileDialog.getSaveFileName(self, 'Open File')
             out_file = open(name, "wb")
             out_file.write(bytes(self.buf))
@@ -272,6 +273,7 @@ class MyWin(QtWidgets.QMainWindow):
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
+
         elif system == "DES":
             key = self.ui.textKey.toPlainText()
             if key and re.match("[0-1]{56}", key) or key == '':
@@ -282,21 +284,44 @@ class MyWin(QtWidgets.QMainWindow):
                 else:
                     text = self.buf
                 try:
-                    for c in DES(text, key, whatDO):
-                        try:
-                            self.ui.pbar.setValue(int(c))
-                        except:
-                            self.ui.pbar.setValue(100)
-                            result, self.buf, key, msg = c[0], c[1], c[2], c[3]
-                            self.ui.textEdit2.setText(result)
-                            self.ui.textKey.setText(key)
-                            self.ui.textEdit4.setText(msg)
-                            break
-                    #result, self.buf, key, msg = DES(text, key, whatDO)
+                    MyWin.setDisabled(self, True)
+                    result, self.buf, key, msg = DES(text, key, whatDO, self.ui.pbar)
+                    MyWin.setDisabled(self, False)
+                    self.ui.textEdit2.setText(result)
+                    self.ui.textKey.setText(key)
+                    self.ui.textEdit4.setText(msg)
 
                 except:
                     self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
                     self.ui.msgErr.exec()
+                    MyWin.setDisabled(self, False)
+
+            else:
+                self.ui.msgErr.setText("Недопустимые входные данные!")
+                self.ui.msgErr.exec()
+
+        elif system == "ГОСТ":
+            key = self.ui.textKey.toPlainText()
+            if key and re.match("[0-1]{256}", key) or key == '':
+                if self.fromFile:
+                    text = self.buf
+                elif whatDO == "Шифруем":
+                    text = bytearray(self.ui.textEdit1.toPlainText().encode('mbcs'))
+                else:
+                    text = self.buf
+                try:
+                    MyWin.setDisabled(self, True)
+                    result, self.buf, key, msg = GOST(text, key, whatDO, self.ui.pbar)
+                    MyWin.setDisabled(self, False)
+                    self.ui.textEdit2.setText(result)
+                    self.ui.textKey.setText(key)
+                    self.ui.textEdit4.setText(msg)
+
+                except:
+                    self.ui.msgErr.setText("Ошибка при выполнении! Проверьте входные данные!")
+                    self.ui.msgErr.exec()
+                    MyWin.setDisabled(self, False)
+
             else:
                 self.ui.msgErr.setText("Недопустимые входные данные!")
                 self.ui.msgErr.exec()
@@ -379,7 +404,17 @@ class MyWin(QtWidgets.QMainWindow):
             self.ui.textKey.setText("")
             self.ui.hintField.setText("Ключ - битовая последовательность")
 
+        elif system == "ГОСТ":
+            self.ui.pbar.setValue(0)
+            self.buf = None
+            self.fromFile = None
+            self.ui.textKey.setEnabled(True)
+            self.ui.textKey.setText("")
+            self.ui.hintField.setText("Ключ - битовая последовательность")
+
         self.ui.Bt_do.setEnabled(True)
+
+
 
 
 if __name__ == "__main__":

@@ -1,6 +1,4 @@
 import random
-import time
-
 from resources import *
 
 # ___________________________key generation________________________________________________ #
@@ -150,7 +148,7 @@ def encryption(bit_text_64, roundkeys, whatDo):
     i_text_64 = permutations_table(left_txt + right_txt, INVERSE_PERMUTATION_TABLE)
     return i_text_64
 
-def DES(openText, input, whatDo):
+def DES(openText, input, whatDo, Progress):
     key = []
     if input is '':
         random.seed()
@@ -164,15 +162,21 @@ def DES(openText, input, whatDo):
     res = bytearray(b'')
     amount_bytes_old = len(openText)
 
-    while len(openText) % 8 != 0:
-        openText.append(0)
+    if whatDo == "Шифруем":
+        musor = 8 - len(openText) % 8
+        for i in range(musor):
+            if i == musor - 1:
+                openText.append(musor)
+            else:
+                openText.append(0)
 
     amount_bytes_new = len(openText)
 
     roundkeys = generate_keys(key_64)
 
     step = 100 / (amount_bytes_new // 8)
-    long = step
+    long_old = 0
+    long_new = step
 
     for i in range(0, amount_bytes_new // 8):
         byte_text_64 = openText[i * 8:(i + 1) * 8]
@@ -185,14 +189,28 @@ def DES(openText, input, whatDo):
             chiper_bit = encryption(bit_text_64, roundkeys[::-1], whatDo)
         for c in range(8):
             res.append(binary_to_decimal(chiper_bit[c * 8:(c + 1) * 8]))
-        yield int(long)
-        long += step
-        if int(long) > 100:
-            long = 100
 
-    yield [res.decode('mbcs'), res, ''.join(map(str, key)), "Исходный ключ: " + str(
+        if int(long_new) - int(long_old) == 1:
+            Progress.setValue(int(long_new))
+        long_new += step
+        long_old += step
+        if int(long_new) > 100:
+            long_new = 100
+
+    if whatDo == "Расшифруем":
+        musor = res[-1]
+        flag = 1
+        for i in range(2, musor + 1):
+            if res[-i] != 0:
+                flag = 0
+                break
+        if flag:
+            res = res[:-musor]
+        amount_bytes_old = len(res)
+
+    return res[:1000].decode('mbcs'), res, ''.join(map(str, key)), "Исходный ключ: " + str(
         key) + "\n" + "С корректирующими битами: " + "\n" + str(
-        key_64) + "\n" + "Длина текста: " + str(amount_bytes_old)]
+        key_64) + "\n" + "Длина текста: " + str(amount_bytes_old)
 
 
 """t1 = DES(bytearray(bytes('Мама мыла раму', 'mbcs')), '10000000001011101000110101101100000111011111001110011111',

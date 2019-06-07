@@ -53,3 +53,28 @@ def decimal_to_binary(decimal):
         decimal = decimal // 2
         i -= 1
     return b
+
+def sum_modn(arg1, arg2, n):
+    tmp = 0
+    res = []
+    for i in range(1, n + 1):
+        if arg1[n-i] == 1 and arg2[n-i] == 1:
+            if tmp == 0:
+                res.append(0)
+            else:
+                res.append(1)
+            tmp = 1
+        elif arg1[n - i] == 0 and arg2[n - i] == 1 or arg1[n - i] == 1 and arg2[n - i] == 0:
+            if tmp == 0:
+                res.append(1)
+                tmp = 0
+            else:
+                res.append(0)
+                tmp = 1
+        else:
+            if tmp == 1:
+                res.append(1)
+            else:
+                res.append(0)
+            tmp = 0
+    return res[::-1]
