@@ -278,7 +278,7 @@ class AnalysisWindow(QtWidgets.QMainWindow):
 
             for i in range(len(perm)):
                 temp = self.alpha_stand[perm[i]:] + self.alpha_stand[:perm[i]]
-                self.ui.table.setItem(i, 1, QTableWidgetItem(self.change_simple(text[:80], temp, self.alpha_stand)))
+                self.ui.table.setItem(i, 1, QTableWidgetItem(self.change_simple(text[:40], temp, self.alpha_stand)))
                 self.ui.table.setItem(i, 0, QTableWidgetItem(temp))
         else:
 
@@ -287,7 +287,7 @@ class AnalysisWindow(QtWidgets.QMainWindow):
             self.ui.table.insertRow(rowPosition)
 
             self.ui.table.setItem(rowPosition, 1, QTableWidgetItem(
-                self.change_simple(text[:80], self.alpha_new, self.alpha_old)))
+                self.change_simple(text[:40], self.alpha_new, self.alpha_old)))
             self.ui.table.setItem(rowPosition, 0, QTableWidgetItem(self.getAlpha(self.alpha_new)))
 
             for i in range(len(self.alpha_stand) - 1):
@@ -297,7 +297,7 @@ class AnalysisWindow(QtWidgets.QMainWindow):
                     temp = [] + self.alpha_new
                     temp[i], temp[i + 1] = temp[i + 1], temp[i]
                     self.ui.table.setItem(rowPosition, 1, QTableWidgetItem(
-                        self.change_simple(text[:80], temp, self.alpha_old)))
+                        self.change_simple(text[:40], temp, self.alpha_old)))
                     self.ui.table.setItem(rowPosition, 0, QTableWidgetItem(self.getAlpha(temp)))
 
         self.ui.table.resizeColumnsToContents()
