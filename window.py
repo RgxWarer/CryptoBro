@@ -6,9 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QRegExpValidator
+from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 
 
@@ -75,12 +73,20 @@ class Ui_Dialog(object):
         self.textKey.setObjectName("textКеу")
 
         self.Bt_do = QtWidgets.QPushButton(Dialog)
-        self.Bt_do.setGeometry(QtCore.QRect(630, 300, 150, 23))
+        self.Bt_do.setGeometry(QtCore.QRect(630, 250, 150, 23))
         self.Bt_do.setObjectName("Bt_do")
 
         self.bt_clear = QtWidgets.QPushButton(Dialog)
-        self.bt_clear.setGeometry(QtCore.QRect(630, 330, 150, 23))
+        self.bt_clear.setGeometry(QtCore.QRect(630, 280, 150, 23))
         self.bt_clear.setObjectName("bt_clear")
+
+        self.Bt_Anal1 = QtWidgets.QPushButton(Dialog)
+        self.Bt_Anal1.setGeometry(QtCore.QRect(630, 310, 150, 23))
+        self.Bt_Anal1.setObjectName("Bt_Anal1")
+
+        self.Bt_Anal2 = QtWidgets.QPushButton(Dialog)
+        self.Bt_Anal2.setGeometry(QtCore.QRect(630, 340, 150, 23))
+        self.Bt_Anal2.setObjectName("Bt_Anal2")
 
         self.Bt_Read = QtWidgets.QPushButton(Dialog)
         self.Bt_Read.setGeometry(QtCore.QRect(340, 185, 100, 25))
@@ -91,7 +97,7 @@ class Ui_Dialog(object):
         self.Bt_Write.setObjectName("Bt_Write")
 
         self.hintField = QtWidgets.QLabel(Dialog)
-        self.hintField.setGeometry(QtCore.QRect(620, 215, 200, 60))
+        self.hintField.setGeometry(QtCore.QRect(620, 230, 200, 20))
         self.hintField.setObjectName("hintField")
 
         self.msgErr = QMessageBox()
@@ -108,6 +114,8 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "CryptoBro"))
 
         self.Bt_do.setText(_translate("Dialog", "Старт"))
+        self.Bt_Anal1.setText(_translate("Dialog", "Частотный криптоанализ"))
+        self.Bt_Anal2.setText(_translate("Dialog", "Полиалфавитный анализ"))
         self.bt_clear.setText(_translate("Dialog", "Очистить"))
         self.Bt_Write.setText(_translate("Dialog", "Запись в файл"))
         self.Bt_Read.setText(_translate("Dialog", "Чтение из файла"))

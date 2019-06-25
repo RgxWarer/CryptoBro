@@ -106,12 +106,3 @@ def GOST(openText, input, whatDo, Progress):
 
     return [res[:1000].decode('mbcs'), res, ''.join(map(str, key_256)), "Исходный ключ: " + str(
         key_256) + "\n" + "Длина текста: " + str(amount_bytes_old)]
-
-"""
-t1 = GOST(bytearray(bytes('Мама мыла раму', 'mbcs')), '10000000001011101000110101101100000111011111001110011111',
-          "Шифруем")
-t2 = GOST(t1, '10000000001011101000110101101100000111011111001110011111',
-          "Расшифруем")
-print(str(t1.decode('mbcs')) + '\n' + str(t2.decode('mbcs')) + str(len(t1)) + str(len(t2)) + str(
-    len(bytes('Мама мыла раму', 'mbcs'))))
-"""

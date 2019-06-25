@@ -13,15 +13,14 @@ from Vernam import Vernam
 from Cardan import Cardan
 from Hill import Hill
 from Vernam_LCG import VernamLCG
+from CryptoAnal import AnalysisWindow
+from CryptoAnalPol import AnalysisPolWindow
 from DES import DES
 from GOST import GOST
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from window import *
 import re
-
 
 class MyWin(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
@@ -30,9 +29,14 @@ class MyWin(QtWidgets.QMainWindow):
         QtWidgets.QWidget.__init__(self, parent)
         self.setWindowIcon(QIcon('logo.png'))
         self.ui = Ui_Dialog()
+        self.ua = AnalysisWindow()
+        self.up = AnalysisPolWindow()
         self.ui.setupUi(self)
 
+
         self.ui.Bt_Write.clicked.connect(self.WriteFunc)
+        self.ui.Bt_Anal1.clicked.connect(self.AnalShow)
+        self.ui.Bt_Anal2.clicked.connect(self.AnalShowPoly)
         self.ui.Bt_Read.clicked.connect(self.ReadFunc)
         self.ui.bt_clear.clicked.connect(self.ClearFunc)
         self.ui.Bt_do.clicked.connect(self.DoFunc)
@@ -89,6 +93,12 @@ class MyWin(QtWidgets.QMainWindow):
 
     def SetStatus(self, how_val):
         self.ui.pbar.setValue(how_val)
+
+    def AnalShow(self):
+        self.ua.show()
+
+    def AnalShowPoly(self):
+        self.up.show()
 
     # -------------------------------------------------------------------------
 

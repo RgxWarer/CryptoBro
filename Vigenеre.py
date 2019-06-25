@@ -1,6 +1,8 @@
 def Vigener(openText, key, whatDo):
-    alpha = {0: 'ABCDEFGHIJKLMNOPQRSTUYWXYZabcdefghijklmnopqrstuvwxyz',
-             1: 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя'}
+    alpha = {0: 'abcdefghijklmnopqrstuvwxyz',
+             1: 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'}
+
+    openText = openText.lower()
 
     if whatDo == "Шифруем":
         DO = 1

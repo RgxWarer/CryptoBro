@@ -16,10 +16,10 @@ def Gronsfeld(openText, key, whatDo):
             if c in alpha[j]:
                 text += alpha[j][(alpha[j].index(c) + DO*int(key[iter])) % len(alpha[j])]
                 flag = 1
+                iter += 1
                 continue
         if not flag:
             text += c
-        iter += 1
         if iter >= len(key):
             iter = 0
     return text
